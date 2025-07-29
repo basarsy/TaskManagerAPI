@@ -5,7 +5,7 @@ using TaskManagerAPI.Models;
 
 namespace TaskManagerAPI.Controllers;
 
-[Route("api/task/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 
 public class TaskController : ControllerBase
@@ -28,7 +28,7 @@ public class TaskController : ControllerBase
     [Route("{id}")]
     public IActionResult GetTask(int id)
     {
-        var task = _context.Tasks.FirstOrDefault(x => x.Id == id);
+        var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
         return Ok(task);
     }
 
@@ -45,27 +45,27 @@ public class TaskController : ControllerBase
 
         _context.Tasks.Add(task);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetTask), new {id = task.Id}, task);
+        return CreatedAtAction(nameof(GetTask), new {id = task.TaskId}, task);
     }
 
     [HttpPut]
     [Route("{id}")]
     public IActionResult UpdateTask(int id, UpdateTaskDto updateDto)
     {
-        var task = _context.Tasks.FirstOrDefault(x => x.Id == id);
+        var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
         task.TaskTitle = updateDto.TaskTitle;
         task.TaskDescription = updateDto.TaskDescription;
         task.IsTaskCompleted = updateDto.IsTaskCompleted;
         
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetTask), new {id = task.Id}, task);
+        return CreatedAtAction(nameof(GetTask), new {id = task.TaskId}, task);
     }
 
     [HttpDelete]
     [Route("{id}")]
     public IActionResult DeleteTask(int id)
     {
-        var task = _context.Tasks.FirstOrDefault(x => x.Id == id);
+        var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
         if (task == null)
         {
             return NotFound($"Task with id {id} not found");
@@ -80,7 +80,7 @@ public class TaskController : ControllerBase
     [Route("{id}/complete")]
     public IActionResult CompleteTask(bool isCompleted, int id)
     {
-        var task = _context.Tasks.FirstOrDefault(x => x.Id == id);
+        var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
         if (task == null)
         {
             return NotFound($"Task with id {id} not found");

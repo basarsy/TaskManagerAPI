@@ -4,7 +4,8 @@ namespace TaskManagerAPI.Models;
 
 public class User
 {
-    public int Id { get; set; }
+    [Key]
+    public int UserId { get; set; }
     
     public string UserName { get; set; }
     

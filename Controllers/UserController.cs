@@ -5,7 +5,7 @@ namespace TaskManagerAPI.Controllers;
 using TaskManagerAPI.Models;
 using TaskManagerAPI.Dtos;
 
-[Route("api/user/{controller}")]
+[Route("api/{controller}")]
 [ApiController]
 
 
@@ -24,10 +24,10 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public IActionResult GetUser(int id)
     {
-        var user = _context.Users.FirstOrDefault(x => x.Id == id);
+        var user = _context.Users.FirstOrDefault(x => x.UserId == id);
         return Ok(user);
     }
 
@@ -42,14 +42,14 @@ public class UserController : ControllerBase
         
         _context.Users.Add(user);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user);
+        return CreatedAtAction(nameof(GetUser), new {id = user.UserId}, user);
     }
 
     [HttpDelete]
     [Route("{id}")]
     public IActionResult DeleteUser(int id)
     {
-        var user = _context.Users.FirstOrDefault(x => x.Id == id);
+        var user = _context.Users.FirstOrDefault(x => x.UserId == id);
         if (user == null)
         {
             return NotFound($"User with id {id} not found");
@@ -64,11 +64,11 @@ public class UserController : ControllerBase
     [Route("{id}")]
     public IActionResult UpdateUser(int id, UpdateUserDto updateDto)
     {
-        var user = _context.Users.FirstOrDefault(x => x.Id == id);
+        var user = _context.Users.FirstOrDefault(x => x.UserId == id);
         user.UserName = updateDto.UserName;
         user.UserPassword = updateDto.UserPassword;
         
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user);
+        return CreatedAtAction(nameof(GetUser), new {id = user.UserId}, user);
     }
 }
