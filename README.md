@@ -1,6 +1,6 @@
 # ✅ TaskManagerAPI
 
-TaskManagerAPI is a simple, modular, and extensible RESTful API built with ASP.NET Core. It provides a structured solution for managing tasks — create, update, list, delete, and mark as completed — with a clean architecture and DTO validation.
+TaskManagerAPI is a simple, modular, and extensible RESTful API built with ASP.NET Core. It provides a structured solution for managing tasks — create, update, list, delete, assign, deassign and mark as completed — and managing users — create, update, delete —  with a clean architecture and DTO validation.
 
 ---
 
@@ -26,27 +26,53 @@ In a world where task flow equals team velocity, this API serves as a scalable b
 
     TaskManagerAPI/
         Controllers/
+            AssignmentController.cs
             TaskController.cs
+            UserController.cs
         Data/
             AppDbContext.cs
         Dtos/
             CreateTaskDto.cs
+            CreateUserDto.cs
+            TaskManageDto.cs
             UpdateTaskDto.cs
+            UpdateUserDto.cs
         Models/
             TaskItem.cs
+            User.cs
 
 ---
 
-## 📡 API Endpoints
+### 📡 API Endpoints
 
+### 📝 Task Endpoints
 | Method | Route                          | Description                     |
 |--------|--------------------------------|---------------------------------|
-| GET    | `/api/task`                    | Get all tasks                   |
-| GET    | `/api/task/{id}`               | Get a task by ID                |
-| POST   | `/api/task`                    | Create a new task               |
-| PUT    | `/api/task/{id}`               | Update a task                   |
-| DELETE | `/api/task/{id}`               | Delete a task                   |
-| PATCH  | `/api/task/{id}/complete`      | Mark task as completed          |
+| GET    | /api/task                      | Get all tasks                   |
+| GET    | /api/task/{id}                 | Get a task by ID                |
+| POST   | /api/task                      | Create a new task               |
+| PUT    | /api/task/{id}                 | Update a task                   |
+| DELETE | /api/task/{id}                 | Delete a task                   |
+| PATCH  | /api/task/{id}/complete        | Mark task as completed          |
+
+---
+
+### 👤 User Endpoints
+| Method | Route                          | Description                     |
+|--------|--------------------------------|---------------------------------|
+| GET    | /api/user                      | Get all users                   |
+| GET    | /api/user/{id}                 | Get a user by ID                |
+| POST   | /api/user                      | Create a new user               |
+| PUT    | /api/user/{id}                 | Update a user                   |
+| DELETE | /api/user/{id}                 | Delete a user                   |
+
+---
+
+### 🔁 Assignment Endpoints
+| Method | Route                              | Description                              |
+|--------|------------------------------------|------------------------------------------|
+| PATCH  | /api/assignment/{taskId}/assign    | Assign a task to a user                  |
+| DELETE | /api/assignment/{taskId}/deassign  | Remove the assigned user from a task     |
 
 
 ---
