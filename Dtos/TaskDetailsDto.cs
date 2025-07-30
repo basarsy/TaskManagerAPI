@@ -1,3 +1,5 @@
+using TaskManagerAPI.Models;
+
 namespace TaskManagerAPI.Dtos;
 
 public class TaskDetailsDto
@@ -7,4 +9,5 @@ public class TaskDetailsDto
     public required string TaskDescription { get; set; }
     public bool IsTaskCompleted { get; set; }
     public DateTime TaskCreatedAt { get; set; }
+    public TaskPriority? TaskPriority { get; set; }
 }

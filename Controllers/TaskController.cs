@@ -27,7 +27,8 @@ public class TaskController : ControllerBase
                 TaskTitle = t.TaskTitle,
                 TaskDescription = t.TaskDescription,
                 IsTaskCompleted = t.IsTaskCompleted,
-                TaskCreatedAt = t.TaskCreatedAt
+                TaskCreatedAt = t.TaskCreatedAt,
+                TaskPriority = t.TaskPriority
             }).ToList();
         return Ok(tasks);
     }
@@ -44,7 +45,8 @@ public class TaskController : ControllerBase
                 TaskTitle = t.TaskTitle,
                 TaskDescription = t.TaskDescription,
                 IsTaskCompleted = t.IsTaskCompleted,
-                TaskCreatedAt = t.TaskCreatedAt
+                TaskCreatedAt = t.TaskCreatedAt,
+                TaskPriority = t.TaskPriority
             })
             .FirstOrDefault();
         
@@ -64,7 +66,8 @@ public class TaskController : ControllerBase
             TaskTitle = createDto.TaskTitle,
             TaskDescription = createDto.TaskDescription,
             IsTaskCompleted = false,
-            TaskCreatedAt = DateTime.UtcNow
+            TaskCreatedAt = DateTime.UtcNow,
+            TaskPriority = 0
         };
 
         _context.Tasks.Add(task);
@@ -119,10 +122,40 @@ public class TaskController : ControllerBase
         
         return Ok($"Task with id {id} has been completed");
     }
-    //[HttpGet]
-    public IActionResult FilterTasks(string filter)
+
+    [HttpPatch]
+    [Route("prio/{id}")]
+    public IActionResult UpdateTaskPriority(int id, UpdateTaskPriorityDto updateDto)
     {
-        var tasks = _context.Tasks.Where(x => x.TaskTitle.Contains(filter)).ToList();
-        return Ok(tasks);
+        var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
+        if (task == null)
+        {
+            return NotFound($"Task with id {id} not found");
+        }
+
+        if (task.TaskPriority == updateDto.TaskPriority)
+        {
+            return BadRequest($"Task with id {id} already has priority {task.TaskPriority}");       
+        }
+        task.TaskPriority = updateDto.TaskPriority;
+        _context.SaveChanges();
+        return Ok($"Task with id {id} has been priority assigned as {updateDto.TaskPriority}.");
+    }
+
+    [HttpGet]
+    [Route("filter")]
+    public IActionResult FilterTasks([FromQuery] TaskFilterDto filterDto)
+    {
+        
+        var task = _context.Tasks
+            .Where(p => p.TaskPriority == filterDto.TaskPriority )
+            .Select(td => new TaskFilterDto()
+                {
+                    TaskTitle = td.TaskTitle,
+                    TaskDescription = td.TaskDescription,
+                })
+            .ToList();
+        
+        return Ok(task);
     }
 }

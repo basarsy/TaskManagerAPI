@@ -1,6 +1,6 @@
 # ✅ TaskManagerAPI
 
-TaskManagerAPI is a simple, modular, and extensible RESTful API built with ASP.NET Core. It provides a structured solution for managing tasks — create, update, list, delete, assign, deassign and mark as completed — and managing users — create, update, delete —  with a clean architecture and DTO validation.
+TaskManagerAPI is a simple, modular, and extensible RESTful API built with ASP.NET Core. It provides a structured solution for managing tasks — create, update, list, delete, assign, unassign and mark as completed — and managing users — create, update, delete —  with a clean architecture and DTO validation.
 
 ---
 
@@ -34,9 +34,13 @@ In a world where task flow equals team velocity, this API serves as a scalable b
         Dtos/
             CreateTaskDto.cs
             CreateUserDto.cs
-            TaskManageDto.cs
+            TaskDetailsDto.cs
+            TaskFilterDto.cs
             UpdateTaskDto.cs
+            UpdateTaskPriorityDto.cs
             UpdateUserDto.cs
+            UserDetailsDto.cs
+            TaskManageDto.cs
         Models/
             TaskItem.cs
             User.cs
@@ -46,14 +50,17 @@ In a world where task flow equals team velocity, this API serves as a scalable b
 ### 📡 API Endpoints
 
 ### 📝 Task Endpoints
-| Method | Route                          | Description                     |
-|--------|--------------------------------|---------------------------------|
-| GET    | /api/task                      | Get all tasks                   |
-| GET    | /api/task/{id}                 | Get a task by ID                |
-| POST   | /api/task                      | Create a new task               |
-| PUT    | /api/task/{id}                 | Update a task                   |
-| DELETE | /api/task/{id}                 | Delete a task                   |
-| PATCH  | /api/task/{id}/complete        | Mark task as completed          |
+
+| Method | Route                          | Description                             |
+|--------|--------------------------------|-----------------------------------------|
+| GET    | /api/task                      | Get all tasks                           |
+| GET    | /api/task/{id}                 | Get a task by ID                        |
+| POST   | /api/task                      | Create a new task                       |
+| PUT    | /api/task/{id}                 | Update a task                           |
+| DELETE | /api/task/{id}                 | Delete a task                           |
+| PATCH  | /api/task/{id}/complete        | Mark task as completed                  |
+| PATCH  | /api/task/prio/{id}            | Update task priority                    |
+| GET    | /api/task/filter?TaskPriority=1| Filter tasks by priority                |
 
 ---
 
@@ -69,10 +76,10 @@ In a world where task flow equals team velocity, this API serves as a scalable b
 ---
 
 ### 🔁 Assignment Endpoints
-| Method | Route                              | Description                              |
-|--------|------------------------------------|------------------------------------------|
-| PATCH  | /api/assignment/{taskId}/assign    | Assign a task to a user                  |
-| DELETE | /api/assignment/{taskId}/deassign  | Remove the assigned user from a task     |
+| Method | Route                             | Description                              |
+|--------|-----------------------------------|------------------------------------------|
+| PATCH  | /api/assignment/{taskId}/assign   | Assign a task to a user                  |
+| DELETE | /api/assignment/{taskId}/unassign | Remove the assigned user from a task     |
 
 
 ---
