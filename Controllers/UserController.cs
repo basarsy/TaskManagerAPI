@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerAPI.Data;
-
-namespace TaskManagerAPI.Controllers;
 using TaskManagerAPI.Models;
 using TaskManagerAPI.Dtos;
 
+namespace TaskManagerAPI.Controllers;
+
 [Route("api/{controller}")]
 [ApiController]
-
 
 public class UserController : ControllerBase
 {
@@ -20,14 +19,31 @@ public class UserController : ControllerBase
     [HttpGet]
     public IActionResult GetUser()
     {
-        var users = _context.Users.ToList();
+        var users = _context.Users
+            .Select(u => new UserDetailsDto()
+            {
+                UserId = u.UserId,
+                UserName = u.UserName
+            })
+            .ToList();
         return Ok(users);
     }
 
     [HttpGet("{id}")]
     public IActionResult GetUser(int id)
     {
-        var user = _context.Users.FirstOrDefault(x => x.UserId == id);
+        var user = _context.Users
+            .Where(u=> u.UserId == id)
+            .Select(u => new UserDetailsDto()
+            {
+                UserId = u.UserId,
+                UserName = u.UserName
+            })
+            .FirstOrDefault();
+        if (user == null)
+        {
+            return NotFound($"User with id {id} not found");
+        }
         return Ok(user);
     }
 
@@ -65,6 +81,10 @@ public class UserController : ControllerBase
     public IActionResult UpdateUser(int id, UpdateUserDto updateDto)
     {
         var user = _context.Users.FirstOrDefault(x => x.UserId == id);
+        if (user == null)
+        {
+            return NotFound($"User with id {id} not found");
+        }
         user.UserName = updateDto.UserName;
         user.UserPassword = updateDto.UserPassword;
         

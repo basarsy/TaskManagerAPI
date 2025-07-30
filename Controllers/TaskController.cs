@@ -18,19 +18,43 @@ public class TaskController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetTask()
+    public IActionResult GetTasks()
     {
-        var tasks = _context.Tasks.ToList();
+        var tasks = _context.Tasks
+            .Select(t => new TaskDetailsDto()
+            {
+                TaskId = t.TaskId,
+                TaskTitle = t.TaskTitle,
+                TaskDescription = t.TaskDescription,
+                IsTaskCompleted = t.IsTaskCompleted,
+                TaskCreatedAt = t.TaskCreatedAt
+            }).ToList();
         return Ok(tasks);
     }
 
     [HttpGet]
     [Route("{id}")]
-    public IActionResult GetTask(int id)
+    public IActionResult GetTasks(int id)
     {
-        var task = _context.Tasks.FirstOrDefault(x => x.TaskId == id);
+        var task = _context.Tasks
+            .Where(t => t.TaskId == id)
+            .Select(t => new TaskDetailsDto()
+            {
+                TaskId = t.TaskId,
+                TaskTitle = t.TaskTitle,
+                TaskDescription = t.TaskDescription,
+                IsTaskCompleted = t.IsTaskCompleted,
+                TaskCreatedAt = t.TaskCreatedAt
+            })
+            .FirstOrDefault();
+        
+        if (task == null)
+        {
+            return NotFound($"Task with id {id} not found");
+        }
         return Ok(task);
     }
+    
 
     [HttpPost]
     public IActionResult CreateTask(CreateTaskDto createDto)
@@ -45,7 +69,7 @@ public class TaskController : ControllerBase
 
         _context.Tasks.Add(task);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetTask), new {id = task.TaskId}, task);
+        return CreatedAtAction(nameof(GetTasks), new {id = task.TaskId}, task);
     }
 
     [HttpPut]
@@ -58,7 +82,7 @@ public class TaskController : ControllerBase
         task.IsTaskCompleted = updateDto.IsTaskCompleted;
         
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetTask), new {id = task.TaskId}, task);
+        return CreatedAtAction(nameof(GetTasks), new {id = task.TaskId}, task);
     }
 
     [HttpDelete]
@@ -94,5 +118,11 @@ public class TaskController : ControllerBase
         _context.SaveChanges();
         
         return Ok($"Task with id {id} has been completed");
+    }
+    //[HttpGet]
+    public IActionResult FilterTasks(string filter)
+    {
+        var tasks = _context.Tasks.Where(x => x.TaskTitle.Contains(filter)).ToList();
+        return Ok(tasks);
     }
 }

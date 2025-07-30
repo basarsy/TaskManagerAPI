@@ -91,5 +91,21 @@ In a world where task flow equals team velocity, this API serves as a scalable b
 ```bash
 git clone https://github.com/yourusername/TaskManagerAPI.git
 cd TaskManagerAPI
+```
+### 2. Add a Migration
+```bash
+dotnet ef migrations add MigrationName
+```
+### 3. Update Database
+```bash
+dotnet ef database update
+```
+### 4. Build the project
+```bash
+dotnet build
+```
 
+### 5. Start the project
+```bash
 dotnet run
+```

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerAPI.Data;
-using TaskManagerAPI.Models;
 using TaskManagerAPI.Dtos;
 
 namespace TaskManagerAPI.Controllers;
@@ -37,8 +36,8 @@ public class AssignmentController : ControllerBase
         return Ok($"Task with id {taskId} has been assigned to user with id {taskDto.UserId}");
     }
     
-    [HttpDelete("{taskId}/deassign")]
-    public IActionResult DeassignTask([FromRoute] int taskId)
+    [HttpDelete("{taskId}/unassign")]
+    public IActionResult UnassignTask([FromRoute] int taskId)
     {
         var task = _context.Tasks.FirstOrDefault(t => t.TaskId == taskId);
         if (task == null)
@@ -48,7 +47,6 @@ public class AssignmentController : ControllerBase
         
         task.UserId = null;
         _context.SaveChanges();
-        
-        return Ok($"Task with id {taskId} has been deassigned");
+        return Ok($"Task with id {taskId} has been unassigned");
     }
 }
