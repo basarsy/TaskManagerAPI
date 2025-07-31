@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerAPI.Data;
 using TaskManagerAPI.Models;
@@ -16,6 +17,7 @@ public class UserController : ControllerBase
         _context = context;
     }
 
+    
     [HttpGet]
     public IActionResult GetUser()
     {
@@ -52,13 +54,20 @@ public class UserController : ControllerBase
     {
         var user = new User()
         {
-            UserName = createDto.UserName,
-            UserPassword = createDto.UserPassword,
+            UserName = createDto.UserName
         };
+
+        var hasher = new PasswordHasher<User>();
+        user.UserPassword = hasher.HashPassword(user, createDto.UserPassword);
         
         _context.Users.Add(user);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetUser), new {id = user.UserId}, user);
+        return CreatedAtAction(nameof(GetUser), 
+            new
+            {
+                id = user.UserId,
+                name = user.UserName,
+            }, user);
     }
 
     [HttpDelete]

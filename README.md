@@ -29,6 +29,7 @@ In a world where task flow equals team velocity, this API serves as a scalable b
             AssignmentController.cs
             TaskController.cs
             UserController.cs
+            AuthController.cs
         Data/
             AppDbContext.cs
         Dtos/
@@ -39,11 +40,14 @@ In a world where task flow equals team velocity, this API serves as a scalable b
             UpdateTaskDto.cs
             UpdateTaskPriorityDto.cs
             UpdateUserDto.cs
+            UserAuthDto.cs
             UserDetailsDto.cs
             TaskManageDto.cs
         Models/
             TaskItem.cs
             User.cs
+        Services/
+            JwtTokenService.cs
 
 ---
 
@@ -80,6 +84,14 @@ In a world where task flow equals team velocity, this API serves as a scalable b
 |--------|-----------------------------------|------------------------------------------|
 | PATCH  | /api/assignment/{taskId}/assign   | Assign a task to a user                  |
 | DELETE | /api/assignment/{taskId}/unassign | Remove the assigned user from a task     |
+
+
+---
+
+### 🔁 Jwt Token Endpoints
+| Method | Route           | Description                            |
+|--------|-----------------|----------------------------------------|
+| POST   | /api/auth/login | Login as user and receive login token. |
 
 
 ---
